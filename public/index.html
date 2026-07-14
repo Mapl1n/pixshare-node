@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#7c3aed"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="PixShare"><title>PixShare — P2P 无损传图</title>
+<style>
+:root{--bg:#fafafa;--s:#fff;--p:#7c3aed;--ph:#6d28d9;--pl:#f5f3ff;--t:#1a1a2e;--ts:#6b7280;--tm:#9ca3af;--b:#e5e7eb;--r:12px;--rs:8px;--sb:env(safe-area-inset-bottom,16px)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--t);line-height:1.5;min-height:100vh;min-height:100dvh}
+#app{max-width:640px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+#app-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--s);border-bottom:1px solid var(--b);position:sticky;top:0;z-index:100;min-height:56px}
+.hl{display:flex;align-items:center;gap:10px}.logo{font-size:26px;line-height:1}
+#app-header h1{font-size:1rem;font-weight:700;color:var(--p)}.hs{font-size:.65rem;color:var(--tm)}
+.cs{display:flex;align-items:center;gap:6px;padding:5px 10px;border-radius:20px;font-size:.7rem;font-weight:600}
+.cd{width:8px;height:8px;border-radius:50%}
+.cs.dc{background:#f3f4f6;color:var(--tm)}.cs.dc .cd{background:var(--tm)}
+.cs.cc{background:#fef3c7;color:#92400e}.cs.cc .cd{background:#f59e0b;animation:pulse 1s infinite}
+.cs.cn{background:#ecfdf5;color:#065f46}.cs.cn .cd{background:#10b981}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+#main{flex:1;padding:16px;padding-bottom:calc(16px + var(--sb));display:flex;flex-direction:column;gap:8px}
+.rs{display:flex;flex-direction:column;gap:12px}
+.rs h2{font-size:.95rem;font-weight:700;color:var(--t);padding-bottom:4px;border-bottom:2px solid var(--pl)}
+.rd{border:none;border-top:1px dashed var(--b);margin:4px 0}
+.dz{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 16px;border:2px dashed var(--b);border-radius:var(--r);background:var(--s);cursor:pointer;text-align:center;transition:all .2s}
+.dz.dr{border-color:var(--p);background:var(--pl)}.di{color:var(--tm);margin-bottom:8px}
+.dt{font-size:.9rem;font-weight:600;margin-bottom:2px}.ds{font-size:.8rem;color:var(--ts)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:12px 18px;border:none;border-radius:var(--rs);font-size:.9rem;font-weight:600;cursor:pointer;transition:all .15s;font-family:inherit;white-space:nowrap}
+.btn:active{transform:scale(.97)}.bp{background:var(--p);color:#fff}.bp:hover{background:var(--ph)}.bp:disabled{background:var(--tm);opacity:.6;cursor:not-allowed}
+.bs{background:var(--pl);color:var(--p)}.bo{background:transparent;color:var(--ts);border:1px solid var(--b)}
+.bl{width:100%;padding:14px;font-size:.95rem;border-radius:var(--r)}
+.tb{display:flex;gap:8px}
+.fg{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.fc{background:var(--s);border-radius:var(--rs);overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08);position:relative}
+.fct{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:var(--bg)}
+.fcp{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:var(--bg);color:var(--tm);font-size:32px}
+.fci{padding:6px 8px}.fcn{font-size:.7rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fcs{font-size:.65rem;color:var(--tm)}
+.fcr{position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.45);color:#fff;border:none;font-size:12px;cursor:pointer;opacity:0;display:flex;align-items:center;justify-content:center}
+.fc:hover .fcr,.fc:active .fcr{opacity:1}@media(hover:none){.fcr{opacity:1}}
+.pd{font-size:.85rem;color:var(--t);margin-bottom:4px}.ph{font-size:.73rem;color:var(--tm);margin-top:8px;text-align:center}
+.ci{display:block;width:100%;max-width:260px;margin:10px auto;height:52px;text-align:center;font-size:1.8rem;font-weight:700;letter-spacing:6px;border:2px solid var(--b);border-radius:var(--rs);background:var(--s);color:var(--t);font-family:monospace;outline:none;transition:border-color .2s;-webkit-appearance:none}
+.ci:focus{border-color:var(--p);box-shadow:0 0 0 3px var(--pl)}.ci::placeholder{letter-spacing:6px;color:var(--tm);font-size:1.3rem}
+.wb{background:var(--pl);border:1px solid #ddd6fe;border-radius:var(--r);padding:24px 16px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px}
+.wi{font-size:44px;animation:pulse 1s ease-in-out infinite}.wt{font-size:.95rem;font-weight:700;color:var(--p)}
+.wco{font-size:.85rem;color:var(--t)}.wco strong{font-size:1.4rem;letter-spacing:6px;color:var(--p)}.wh{font-size:.75rem;color:var(--tm)}
+.wby{background:#fffbeb;border-color:#fde68a}.wby .wt{color:#92400e}
+.wbg{background:#ecfdf5;border-color:#a7f3d0}.wbg .wt{color:#065f46}
+.tp{display:flex;flex-direction:column;gap:8px}.phr{display:flex;justify-content:space-between;font-size:.8rem;font-weight:600}
+.pbw{width:100%;height:8px;background:var(--b);border-radius:4px;overflow:hidden}.pf{height:100%;background:var(--p);border-radius:4px;transition:width .3s}.pfi{font-size:.75rem;color:var(--ts)}
+.rst{display:flex;flex-direction:column;align-items:center;padding:28px 16px;text-align:center;gap:10px}
+.ci2{font-size:44px}.ct{font-size:1.1rem;font-weight:700}.cm{font-size:.8rem;color:var(--ts)}
+.rig{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;width:100%}
+.ric{background:var(--s);border-radius:var(--rs);overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08);cursor:pointer}.ric img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
+.ric .cl{font-size:.65rem;padding:4px 8px;color:var(--ts);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ra{display:flex;gap:8px;justify-content:center;margin-top:8px}
+.ih{font-size:.72rem;color:var(--tm)}.ei{font-size:44px}.em{font-size:.9rem;color:#ef4444;font-weight:500}
+.lb{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.92);z-index:200;display:flex;align-items:center;justify-content:center}
+.lb img{max-width:100%;max-height:100%}.lbx{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;border:none;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.to{position:fixed;bottom:calc(20px + var(--sb));left:50%;transform:translateX(-50%);z-index:1000;display:flex;flex-direction:column;gap:8px;width:calc(100% - 32px);max-width:400px;pointer-events:none}
+.tom{background:var(--t);color:#fff;padding:12px 16px;border-radius:8px;font-size:.85rem;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,.1);animation:ti .3s ease,to .3s ease 2.5s forwards;pointer-events:auto;text-align:center}
+.tom.ok{background:#10b981}.tom.wn{background:#f59e0b;color:#000}.tom.er{background:#ef4444}
+@keyframes ti{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes to{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(16px)}}
+.hn{display:none!important}
+@media(min-width:640px){.fg{grid-template-columns:repeat(3,1fr);gap:12px}.rig{grid-template-columns:repeat(3,1fr);gap:12px}.dz{padding:36px 20px}}
+@media(min-width:1024px){.fg{grid-template-columns:repeat(4,1fr)}.rig{grid-template-columns:repeat(4,1fr)}.rd{display:none}#main{flex-direction:row;gap:20px}.rs{flex:1}}
+</style></head><body>
+<div id="app">
+<header id="app-header"><div class="hl"><div class="logo">📸</div><div><h1>PixShare</h1><p class="hs" id="server-info">Node.js 版 · 自建信令</p></div></div>
+<div id="cs" class="cs dc"><span class="cd"></span><span id="ct">未连接</span></div></header>
+<main id="main">
+<section class="rs"><h2>📤 发送方</h2>
+<div id="dz" class="dz"><div class="di"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><p class="dt">点击选择要发送的图片</p><p class="ds">或拖拽图片到此处</p><input type="file" id="fi" multiple accept="image/*,.heic,.heif,.avif" hidden></div>
+<div id="fg" class="fg hn"></div><div id="tb" class="tb hn"><button id="ba" class="btn bs">+ 添加</button><button id="bc" class="btn bo">清空</button></div>
+<button id="bsh" class="btn bp bl hn">开始发送</button>
+<div id="sp" class="hn"><p class="pd">输入一个 <strong>6 位数字</strong> 作为房间号：</p><input type="text" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" class="ci" id="sc" placeholder="000000"><button id="bcr" class="btn bp bl">创建房间</button><p class="ph">把 6 位数字告诉好友，好友输入后点加入</p></div>
+<div id="sw" class="hn wb"><div class="wi">⏳</div><p class="wt">房间已创建</p><p class="wco">房间号：<strong class="cdt"></strong></p><p class="wh">等待好友输入此数字并申请加入...</p></div>
+<div id="sj" class="hn wb wby"><div class="wi">🔔</div><p class="wt">有人申请加入！</p><button id="bcj" class="btn bp bl" style="margin-top:8px">✅ 确认接收</button></div>
+<div id="sjj" class="hn wb wbg"><div class="wi">🔗</div><p class="wt">已确认！</p><p class="wh">P2P 连接建立中...</p></div>
+<div id="scn" class="hn"><div id="tp" class="tp hn"><div class="phr"><span>📤 正在发送...</span><span id="spt">0%</span></div><div class="pbw"><div id="spb" class="pf" style="width:0%"></div></div><p id="sfn" class="pfi"></p></div></div>
+</section>
+<hr class="rd">
+<section class="rs"><h2>📥 接收方</h2>
+<div id="rp"><p class="pd">输入发送方给的 <strong>6 位数字</strong>：</p><input type="text" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" class="ci" id="rc" placeholder="000000"><button id="bjr" class="btn bp bl">加入房间</button></div>
+<div id="rw" class="hn wb"><div class="wi">🔍</div><p class="wt">正在加入房间...</p><p class="wco">房间号：<strong class="cdt"></strong></p><p class="wh">等待发送方确认...</p></div>
+<div id="rwc" class="hn wb wby"><div class="wi">⏳</div><p class="wt">已申请加入</p><p class="wh">等待发送方确认...</p></div>
+<div id="rj" class="hn wb wbg"><div class="wi">🔗</div><p class="wt">发送方已确认！</p><p class="wh">正在建立 P2P 连接...</p></div>
+<div id="rr" class="hn rst"><div class="phr"><span>📥 正在接收...</span><span id="rpt">0%</span></div><div class="pbw"><div id="rpb" class="pf" style="width:0%"></div></div><p id="rfn" class="pfi"></p></div>
+<div id="rcv" class="hn rst"><div class="ci2">✅</div><p class="ct">接收完成！</p><p id="rsu" class="cm"></p><div id="rig" class="rig"></div><div class="ra"><button id="bsa" class="btn bp bl">📥 全部保存</button></div><p id="ih" class="ih hn">iOS：长按图片 →「存储到"照片"」保存</p></div>
+<div id="re" class="hn rst"><div class="ei">❌</div><p id="rem" class="em"></p><button id="brt" class="btn bp">🔄 重新开始</button></div>
+</section></main>
+<div id="to" class="to"></div></div>
+
+<script>
+(function(){
+'use strict';
+var F=function(id){return document.getElementById(id)};
+function T(msg,type){var t=document.createElement('div');t.className='tom '+(type||'');t.textContent=msg;t.setAttribute('role','alert');F('to').appendChild(t);setTimeout(function(){if(t.parentNode)t.parentNode.removeChild(t)},3000)}
+function BS(b){if(b===0)return'0 B';var k=1024,s=['B','KB','MB','GB'];var i=Math.floor(Math.log(b)/Math.log(k));return(i===0?b:(b/Math.pow(k,i)).toFixed(1))+' '+s[i]}
+function ES(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function SF(n){return n.replace(/[\\\/:*?"<>|]/g,'_').trim()}
+function II(f){if(f.type&&f.type.startsWith('image/'))return true;var n=f.name.toLowerCase();var e=['.jpg','.jpeg','.png','.gif','.webp','.avif','.heic','.heif','.bmp','.tiff','.tif','.svg'];for(var i=0;i<e.length;i++){if(n.endsWith(e[i]))return true}return false}
+function IOS(){return /iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)}
+
+// ---- WebSocket connection ----
+var WS_URL = (location.protocol==='https:'?'wss://':'ws://')+location.host+'/ws';
+var _ws = null, _wsOpen = false;
+
+function wsConnect(){
+  return new Promise(function(resolve,reject){
+    if(_ws&&_ws.readyState===WebSocket.OPEN){resolve();return}
+    var url = WS_URL;
+    // Append /ws path if the server uses it
+    _ws = new WebSocket(url.replace(/\/$/,'')+'/ws');
+    _ws.onopen = function(){_wsOpen=true;cs('cn','信令已连接');resolve()};
+    _ws.onerror = function(){reject(new Error('WebSocket连接失败'))};
+    _ws.onclose = function(){_wsOpen=false;cs('dc','信令断开')};
+  });
+}
+
+// Actually, we proxy WebSocket at the same port. The server uses ws://HOST:PORT as the WebSocket endpoint.
+// But the server.js uses the same HTTP server with WebSocketServer({server}),
+// so WebSocket connects to the same port. Let me fix WS_URL:
+WS_URL = (location.protocol==='https:'?'wss://':'ws://')+location.host;
+
+function wsConnect(){
+  return new Promise(function(resolve,reject){
+    if(_ws&&_ws.readyState===WebSocket.OPEN){resolve();return}
+    _ws=new WebSocket(WS_URL);
+    _ws.onmessage=_routeMsg;
+    _ws.onopen=function(){_wsOpen=true;cs('cn','信令服务器已连接');resolve()};
+    _ws.onerror=function(){_wsOpen=false;reject(new Error('连接失败'))};
+    _ws.onclose=function(){_wsOpen=false;cs('dc','信令断开')};
+  });
+}
+
+var _msgHandlers={};
+
+function _routeMsg(event){
+  var msg; try{msg=JSON.parse(event.data)}catch(e){return}
+  var hs=_msgHandlers[msg.type];if(hs)hs.forEach(function(h){h(msg)});
+  var wh=_msgHandlers['*'];if(wh)wh.forEach(function(h){h(msg)});
+}
+
+function wsSend(msg){if(_ws&&_ws.readyState===WebSocket.OPEN)_ws.send(JSON.stringify(msg))}
+function wsOn(type,cb){if(!_msgHandlers[type])_msgHandlers[type]=[];_msgHandlers[type].push(cb)}
+function wsOff(type){delete _msgHandlers[type]}
+
+function cs(s,t){var e=F('cs');e.className='cs '+s;F('ct').textContent=t}
+
+// ---- File handling ----
+var _files=[];
+function renderFiles(){
+  if(!_files.length){F('dz').classList.remove('hn');F('fg').classList.add('hn');F('tb').classList.add('hn');F('bsh').classList.add('hn');F('fg').innerHTML='';return}
+  F('dz').classList.add('hn');F('fg').classList.remove('hn');F('tb').classList.remove('hn');F('bsh').classList.remove('hn');
+  var h='';for(var i=0;i<_files.length;i++){var f=_files[i],n=ES(f.dn||f.file.name);h+='<div class="fc"><div id="th'+i+'"><div class="fcp">🖼</div></div><button class="fcr" data-i="'+i+'">✕</button><div class="fci"><div class="fcn" title="'+n+'">'+n+'</div><div class="fcs">'+BS(f.sz)+'</div></div></div>'}
+  F('fg').innerHTML=h;
+  for(var j=0;j<_files.length;j++){(function(idx,file){var w=F('th'+idx);if(!w)return;try{var img=document.createElement('img');img.className='fct';img.alt=file.name;img.src=URL.createObjectURL(file);w.innerHTML='';w.appendChild(img)}catch(e){}})(j,_files[j].file)}
+  F('fg').querySelectorAll('.fcr').forEach(function(b){b.addEventListener('click',function(e){e.stopPropagation();var idx=parseInt(this.getAttribute('data-i'),10);_files.splice(idx,1);renderFiles()})});
+  F('bsh').textContent='开始发送（'+_files.length+' 张）'
+}
+F('dz').addEventListener('click',function(){F('fi').click()});F('dz').setAttribute('tabindex','0');F('dz').setAttribute('role','button');
+F('dz').addEventListener('dragover',function(e){e.preventDefault();F('dz').classList.add('dr')});
+F('dz').addEventListener('dragleave',function(){F('dz').classList.remove('dr')});
+F('dz').addEventListener('drop',function(e){e.preventDefault();F('dz').classList.remove('dr');addFiles(e.dataTransfer.files)});
+F('fi').addEventListener('change',function(){if(F('fi').files.length){addFiles(F('fi').files);F('fi').value=''}});
+F('ba').addEventListener('click',function(){F('fi').click()});F('bc').addEventListener('click',function(){_files=[];renderFiles();T('已清空','ok')});
+function addFiles(fl){var a=[];for(var i=0;i<fl.length;i++){if(II(fl[i])){_files.push({file:fl[i],dn:SF(fl[i].name),sz:fl[i].size,tp:fl[i].type});a.push(fl[i].name)}}if(a.length<fl.length)T('已跳过 '+(fl.length-a.length)+' 个非图片文件','wn');renderFiles()}
+
+// ---- Panels ----
+function S(el){if(typeof el==='string')el=F(el);el.classList.remove('hn')}
+function H(el){if(typeof el==='string')el=F(el);el.classList.add('hn')}
+function hideAll(){H('sp');H('sw');H('sj');H('sjj');H('scn');H('rp');H('rw');H('rwc');H('rj');H('rr');H('rcv');H('re');F('tp').classList.add('hn')}
+
+// ---- P2P Core ----
+var _pc=null,_dc=null,_isSender=false,_pend=null,_recv=[],_done=false,_code='';
+var ICE={iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'},{urls:'turn:openrelay.metered.ca:80',username:'openrelayproject',credential:'openrelayproject'}]};
+
+function WI(pc,t){return new Promise(function(resolve){if(pc.iceGatheringState==='complete'){resolve();return}var to=setTimeout(function(){resolve()},t);pc.onicegatheringstatechange=function(){if(pc.iceGatheringState==='complete'){clearTimeout(to);resolve()}}})}
+
+// ---- SENDER ----
+F('bsh').addEventListener('click',function(){if(!_files.length){T('请先选择图片','wn');return}S('sp');H('bsh')});
+F('bcr').addEventListener('click',function(){
+  var code=F('sc').value.replace(/\D/g,'');if(!/^\d{6}$/.test(code)){T('请输入完整的 6 位数字','wn');return}
+  _isSender=true;_pend=_files;_done=false;_code=code;H('sp');S('sw');F('sw').querySelector('.cdt').textContent=code;cs('cc','等待好友...');
+  wsConnect().then(function(){
+    wsSend({type:'create',room:code});
+    wsOn('join-request',function(){H('sw');S('sj')});
+    wsOn('peer-disconnected',function(){if(!_done){T('对方已断开','wn');cs('dc','对方断开')}});
+  }).catch(function(err){T('连接服务器失败，请确认服务器已启动','er');cs('dc','连接失败')});
+});
+F('bcj').addEventListener('click',function(){
+  H('sj');S('sjj');cs('cc','建立P2P...');
+  wsOff('join-request');
+  _pc=new RTCPeerConnection(ICE);_dc=_pc.createDataChannel('px',{ordered:true});setupDC(_dc,_pend);
+  _pc.createOffer().then(function(o){return _pc.setLocalDescription(o)}).then(function(){return WI(_pc,2000)}).then(function(){
+    var sdp=JSON.stringify({sdp:_pc.localDescription.sdp,type:_pc.localDescription.type});
+    wsSend({type:'confirm',room:_code});
+    wsSend({type:'offer',room:_code,sdp:sdp});
+    wsOn('answer',function(msg){
+      try{
+        var a=JSON.parse(msg.sdp);
+        _pc.setRemoteDescription(new RTCSessionDescription(a)).then(function(){H('sjj');S('scn');F('tp').classList.remove('hn');cs('cn','P2P已连！正在传图...')}).catch(function(){T('连接失败','er')})
+      }catch(e){T('回复格式错误','er')}
+    });
+  }).catch(function(err){if(!_done){T('连接失败，请重试','er');cs('dc','失败')}});
+  _pc.oniceconnectionstatechange=function(){var s=_pc.iceConnectionState;if(s==='connected'||s==='completed')cs('cn','已连接 ✅')};
+});
+
+// ---- RECEIVER ----
+F('bjr').addEventListener('click',function(){
+  var code=F('rc').value.replace(/\D/g,'');if(!/^\d{6}$/.test(code)){T('请输入完整的 6 位数字','wn');return}
+  _isSender=false;_recv=[];_done=false;_code=code;H('rp');S('rw');F('rw').querySelector('.cdt').textContent=code;cs('cc','加入房间...');
+  wsConnect().then(function(){
+    wsSend({type:'join',room:code});
+    wsOn('joined',function(){H('rw');S('rwc');cs('cc','等待发送方确认...')});
+    wsOn('confirmed',function(){H('rwc');S('rj');cs('cc','发送方已确认！建立P2P...')});
+    wsOn('offer',function(msg){processOffer(msg.sdp)});
+    wsOn('error',function(msg){T(msg.message||'房间不存在','er');H('rw');S('rp');cs('dc','失败')});
+    wsOn('peer-disconnected',function(){if(!_done){T('对方已断开','wn');cs('dc','对方断开')}});
+  }).catch(function(err){T('连接服务器失败','er');cs('dc','失败');H('rw');S('rp')});
+});
+
+function processOffer(sdpText){
+  var m=sdpText.match(/\{[\s\S]*"type"\s*:\s*"offer"[\s\S]*\}/);if(m)sdpText=m[0];
+  var offer;try{offer=JSON.parse(sdpText)}catch(e){T('无效连接码','er');return}
+  _pc=new RTCPeerConnection(ICE);_pc.ondatachannel=function(e){_dc=e.channel;setupRecvDC(_dc)};
+  _pc.setRemoteDescription(new RTCSessionDescription(offer)).then(function(){return _pc.createAnswer()}).then(function(a){return _pc.setLocalDescription(a)}).then(function(){return WI(_pc,2000)}).then(function(){
+    var sdp=JSON.stringify({sdp:_pc.localDescription.sdp,type:_pc.localDescription.type});
+    wsSend({type:'answer',room:_code,sdp:sdp});
+    cs('cc','等待P2P连接...');
+  }).catch(function(err){if(!_done){T('连接失败','er')}});
+  _pc.oniceconnectionstatechange=function(){var s=_pc.iceConnectionState;if(s==='connected'||s==='completed')cs('cn','P2P已连！等待接收...')};
+}
+
+// ---- Data Channel ----
+function setupDC(dc,files){dc.onopen=function(){cs('cn','正在发送...');sendFiles(dc,files)};dc.onclose=function(){if(!_done)cs('dc','连接关闭')}}
+function setupRecvDC(dc){var cur=null,chunks=[],rs=0,fc=0,ec=0,tr=0,te=0;
+  dc.onopen=function(){cs('cn','已连接')};
+  dc.onmessage=function(e){var d=e.data;if(d instanceof ArrayBuffer){var a=new Uint8Array(d);chunks.push(a);rs+=a.byteLength;tr+=a.byteLength;if(cur&&cur.size>0)updR(Math.round(rs/cur.size*100),cur.name);if(te>0)cs('cn','接收 '+Math.round(tr/te*100)+'%');return}if(typeof d!=='string')return;var m;try{m=JSON.parse(d)}catch(_){return}
+  switch(m.type){case'metadata':te=m.totalSize;ec=m.count;H('rj');S('rr');updR(0,'准备接收 '+m.count+' 张...');break;case'file-start':cur=m;chunks=[];rs=0;updR(0,m.name);break;case'file-end':if(cur&&chunks.length){_recv.push({name:cur.name,blob:new Blob(chunks,{type:cur.mime||'application/octet-stream'}),size:cur.size});fc++;cs('cn','接收 '+fc+'/'+ec)}cur=null;chunks=[];rs=0;break;case'complete':_done=true;H('rr');S('rcv');cs('cn','接收完成 ✅');showImgs();break}};
+  dc.onclose=function(){if(!_done&&_recv.length>0){showImgs();T('连接关闭，已接收 '+_recv.length+' 张','wn')}}
+}
+function sendFiles(dc,files){var ts=0,sb=0;for(var i=0;i<files.length;i++)ts+=files[i].sz;dc.send(JSON.stringify({type:'metadata',files:files.map(function(f){return{name:f.dn,size:f.sz,mime:f.tp}}),totalSize:ts,count:files.length}));var idx=0;
+  function sn(){if(idx>=files.length){dc.send(JSON.stringify({type:'complete'}));_done=true;updS(100,'全部发送完成！');cs('cn','发送完成 ✅');return}
+    var f=files[idx];updS(0,f.dn);f.file.arrayBuffer().then(function(b){var sz=b.byteLength;dc.send(JSON.stringify({type:'file-start',name:f.dn,size:sz,index:idx}));var o=0;
+    function ck(){if(o>=sz){dc.send(JSON.stringify({type:'file-end',index:idx}));sb+=sz;updS(Math.round(sb/ts*100));idx++;setTimeout(sn,30);return}dc.send(b.slice(o,Math.min(o+16384,sz)));o+=16384;if(dc.bufferedAmount>131072)setTimeout(ck,80);else ck()}ck()})}sn()}
+function updS(pct,fn){F('spb').style.width=pct+'%';F('spt').textContent=pct+'%';if(fn)F('sfn').textContent=fn}
+function updR(pct,fn){F('rpb').style.width=pct+'%';F('rpt').textContent=pct+'%';if(fn)F('rfn').textContent=fn}
+function showImgs(){var total=0;for(var i=0;i<_recv.length;i++)total+=_recv[i].size;F('rsu').textContent='收到 '+_recv.length+' 张 · '+BS(total);
+  var h='';for(var i=0;i<_recv.length;i++){var img=_recv[i];h+='<div class="ric" data-i="'+i+'"><img src="'+URL.createObjectURL(img.blob)+'" alt="'+ES(img.name)+'"><div class="cl">'+ES(img.name)+'</div></div>'}
+  F('rig').innerHTML=h;F('rig').querySelectorAll('.ric').forEach(function(c){c.addEventListener('click',function(){lb(_recv[parseInt(this.getAttribute('data-i'),10)])})});if(IOS())F('ih').classList.remove('hn')
+}
+function lb(img){var d=document.createElement('div');d.className='lb';var el=document.createElement('img');el.src=URL.createObjectURL(img.blob);var btn=document.createElement('button');btn.className='lbx';btn.textContent='✕';btn.onclick=function(){document.body.removeChild(d)};d.appendChild(el);d.appendChild(btn);d.onclick=function(e){if(e.target===d)document.body.removeChild(d)};document.body.appendChild(d)}
+F('bsa').addEventListener('click',function(){if(!_recv.length){T('无图片','wn');return}if(IOS()){_recv.forEach(function(i){dlOne(i)});T('iOS：请在下载弹窗中逐张保存','wn');return}(function dq(i){if(i>=_recv.length){T('✅ 全部保存完成！','ok');return}dlOne(_recv[i]);setTimeout(function(){dq(i+1)},500)})(0)});
+function dlOne(img){var url=URL.createObjectURL(img.blob);var a=document.createElement('a');a.href=url;a.download=img.name;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(url)},10000)}
+F('brt').addEventListener('click',function(){if(_pc){_pc.close();_pc=null}_dc=null;_recv=[];_done=false;_code='';if(_ws&&_ws.readyState===WebSocket.OPEN){_ws.close()}_ws=null;hideAll();S('rp');F('rc').value='';cs('dc','未连接')});
+F('bsh').addEventListener('click',function(){if(!_files.length){T('请先选择图片','wn');return}S('sp');H('bsh')});
+
+// Show server info in header
+try{var host=location.host;F('server-info').textContent='自建服务器 · '+host}catch(e){}
+console.log('📸 PixShare Node ready (self-hosted signaling)');
+})();
+</script></body></html>

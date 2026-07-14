@@ -1,0 +1,15 @@
+{
+  "name": "pixshare",
+  "version": "1.0.0",
+  "description": "P2P image sharing — Node.js server + WebSocket signaling",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "tunnel": "node tunnel.js"
+  },
+  "dependencies": {
+    "ws": "^8.18.0",
+    "qrcode": "^1.5.4"
+  },
+  "license": "MIT"
+}
