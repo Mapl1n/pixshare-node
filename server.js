@@ -16,7 +16,6 @@ const path = require('path');
 const crypto = require('crypto');
 const os = require('os');
 const { WebSocketServer } = require('ws');
-const { parse } = require('url');
 
 // ---- Modules ----
 const auth = require('./auth');
