@@ -1,13 +1,17 @@
 {
   "name": "pixshare",
-  "version": "1.0.0",
-  "description": "P2P image sharing — Node.js server + WebSocket signaling",
+  "version": "2.0.0",
+  "description": "P2P image sharing — Node.js server + WebSocket signaling + SQLite persistence + JWT auth",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "dev": "node --watch server.js",
     "tunnel": "node tunnel.js"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "sql.js": "^1.12.0",
     "ws": "^8.18.0",
     "qrcode": "^1.5.4"
   },
